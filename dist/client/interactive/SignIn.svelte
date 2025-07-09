@@ -1,0 +1,20 @@
+<script lang="ts">
+	import { clerkHostRenderer } from '../../action.js';
+	import type { SignInProps } from '@clerk/types';
+	import ClerkLoaded from '../control/ClerkLoaded.svelte';
+
+	const props: SignInProps = $props();
+</script>
+
+<ClerkLoaded>
+	{#snippet children(clerk)}
+		<div
+			use:clerkHostRenderer={{
+				mount: clerk.mountSignIn,
+				unmount: clerk.unmountSignIn,
+				updateProps: (clerk as any).__unstable__updateProps,
+				props: $state.snapshot(props)
+			}}
+		></div>
+	{/snippet}
+</ClerkLoaded>

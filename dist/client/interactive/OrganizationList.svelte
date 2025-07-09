@@ -1,0 +1,20 @@
+<script lang="ts">
+	import { clerkHostRenderer } from '../../action.js';
+	import type { OrganizationListProps } from '@clerk/types';
+	import ClerkLoaded from '../control/ClerkLoaded.svelte';
+
+	const props: OrganizationListProps = $props();
+</script>
+
+<ClerkLoaded>
+	{#snippet children(clerk)}
+		<div
+			use:clerkHostRenderer={{
+				mount: clerk.mountOrganizationList,
+				unmount: clerk.unmountOrganizationList,
+				updateProps: (clerk as any).__unstable__updateProps,
+				props: $state.snapshot(props)
+			}}
+		></div>
+	{/snippet}
+</ClerkLoaded>
