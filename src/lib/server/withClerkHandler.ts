@@ -148,7 +148,7 @@ export function withClerkHandler(middlewareOptions?: ClerkSvelteKitMiddlewareOpt
 				console.log('[svelte-clerk] Skipping header/cookie update due to token expiration');
 			}
 		} else {
-			decorateHeaders(event, requestState.headers);
+			// decorateHeaders(event, requestState.headers);
 		}
 
 		if (debug) {
@@ -158,23 +158,23 @@ export function withClerkHandler(middlewareOptions?: ClerkSvelteKitMiddlewareOpt
 	};
 }
 
-function decorateHeaders(event: RequestEvent, headers: Headers) {
-	type CookieSerializerOptions = Parameters<typeof event.cookies.set>[2];
-
-	const setCookie = headers.get('set-cookie');
-	// We separate cookie setting logic because SvelteKit
-	// does not allow setting cookies with setHeaders.
-	if (setCookie) {
-		const splitCookies = splitCookiesString(setCookie);
-		const parsedCookies = parse(splitCookies);
-		parsedCookies.forEach((parsedCookie) => {
-			const { name, value, ...options } = parsedCookie;
-			event.cookies.set(name, value, options as CookieSerializerOptions & { path: string });
-		});
-		headers.delete('set-cookie');
-	}
-	event.setHeaders(Object.fromEntries(headers));
-}
+// function decorateHeaders(event: RequestEvent, headers: Headers) {
+// 	type CookieSerializerOptions = Parameters<typeof event.cookies.set>[2];
+//
+// 	const setCookie = headers.get('set-cookie');
+// 	// We separate cookie setting logic because SvelteKit
+// 	// does not allow setting cookies with setHeaders.
+// 	if (setCookie) {
+// 		const splitCookies = splitCookiesString(setCookie);
+// 		const parsedCookies = parse(splitCookies);
+// 		parsedCookies.forEach((parsedCookie) => {
+// 			const { name, value, ...options } = parsedCookie;
+// 			event.cookies.set(name, value, options as CookieSerializerOptions & { path: string });
+// 		});
+// 		headers.delete('set-cookie');
+// 	}
+// 	event.setHeaders(Object.fromEntries(headers));
+// }
 
 function decorateLocals(
 	event: RequestEvent,
