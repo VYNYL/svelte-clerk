@@ -119,7 +119,7 @@ export function withClerkHandler(middlewareOptions) {
             }
         }
         else {
-            decorateHeaders(event, requestState.headers);
+            // decorateHeaders(event, requestState.headers);
         }
         if (debug) {
             console.log('[svelte-clerk] Authentication process completed');
@@ -127,21 +127,23 @@ export function withClerkHandler(middlewareOptions) {
         return resolve(event);
     };
 }
-function decorateHeaders(event, headers) {
-    const setCookie = headers.get('set-cookie');
-    // We separate cookie setting logic because SvelteKit
-    // does not allow setting cookies with setHeaders.
-    if (setCookie) {
-        const splitCookies = splitCookiesString(setCookie);
-        const parsedCookies = parse(splitCookies);
-        parsedCookies.forEach((parsedCookie) => {
-            const { name, value, ...options } = parsedCookie;
-            event.cookies.set(name, value, options);
-        });
-        headers.delete('set-cookie');
-    }
-    event.setHeaders(Object.fromEntries(headers));
-}
+// function decorateHeaders(event: RequestEvent, headers: Headers) {
+// 	type CookieSerializerOptions = Parameters<typeof event.cookies.set>[2];
+//
+// 	const setCookie = headers.get('set-cookie');
+// 	// We separate cookie setting logic because SvelteKit
+// 	// does not allow setting cookies with setHeaders.
+// 	if (setCookie) {
+// 		const splitCookies = splitCookiesString(setCookie);
+// 		const parsedCookies = parse(splitCookies);
+// 		parsedCookies.forEach((parsedCookie) => {
+// 			const { name, value, ...options } = parsedCookie;
+// 			event.cookies.set(name, value, options as CookieSerializerOptions & { path: string });
+// 		});
+// 		headers.delete('set-cookie');
+// 	}
+// 	event.setHeaders(Object.fromEntries(headers));
+// }
 function decorateLocals(event, auth) {
     event.locals.auth = auth;
     event.locals.currentUser = createCurrentUser(auth());
